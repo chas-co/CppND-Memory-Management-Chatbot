@@ -44,7 +44,90 @@ ChatBot::~ChatBot()
 
 //// STUDENT CODE
 ////
+// copy constructor
+    ChatBot::ChatBot(const ChatBot &source)
+    {
+        std::cout<<"ChatBot Copy Constructor"<<std::endl;
 
+        // A new handle is created on the heap because the chatbot class owns the image member 
+        if (source._image!=NULL) 
+        { this->_image = new wxBitmap(*source._image);}
+        else
+        {this->_image = NULL;}
+        
+        this->_chatLogic = source._chatLogic;
+        this->_currentNode = source._currentNode;
+        this->_rootNode = source._rootNode;
+                
+    }
+
+    // move constructor 
+    ChatBot::ChatBot(ChatBot &&source)
+    {
+        std::cout<<"ChatBot Move Constructor"<<std::endl;
+        this->_chatLogic = source._chatLogic;
+        this->_currentNode = source._currentNode;
+        this->_rootNode = source._rootNode;
+        this->_image = source._image;
+        this->_chatLogic->SetChatbotHandle(this);
+
+        source._chatLogic = nullptr;
+        source._currentNode = nullptr;
+        source._rootNode = nullptr;
+        source._image = NULL;        
+    }
+
+    //copy assignment operator
+    ChatBot &ChatBot::operator=(const ChatBot &source)
+    {
+        std::cout<<"ChatBot Copy Assignment Operator"<<std::endl;
+
+        if (this == &source)
+        {return *this;}
+        
+        // Check if _image has been previously assinged. Delete if true.
+        if (this->_image != NULL)
+        {delete _image;}
+
+        // Create a new _image on the heap from the source
+        if (source._image!=NULL) 
+        { this->_image = new wxBitmap(*source._image);}
+
+        else
+        {this->_image = NULL;}
+        
+        this->_chatLogic = source._chatLogic;
+        this->_currentNode = source._currentNode;
+        this->_rootNode = source._rootNode;
+
+        return *this;
+            
+    }
+
+    //move assignment operator
+    ChatBot &ChatBot:: operator=(ChatBot &&source)
+    {
+        std::cout<<"ChatBot Move Assignment Operator"<<std::endl;
+        if (this == &source)
+        {return *this;}
+        
+        if(this->_image!= NULL)
+        {delete _image;}
+
+        this->_image = source._image;
+        this->_chatLogic = source._chatLogic;
+        this->_currentNode = source._currentNode;
+        this->_rootNode = source._rootNode;
+
+        this->_chatLogic->SetChatbotHandle(this);
+
+        source._chatLogic = nullptr;
+        source._currentNode = nullptr;
+        source._rootNode = nullptr;
+        source._image = NULL; 
+
+        return *this;
+    }
 ////
 //// EOF STUDENT CODE
 
